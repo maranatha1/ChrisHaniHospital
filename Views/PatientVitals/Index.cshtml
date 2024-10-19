@@ -1,0 +1,103 @@
+﻿@model IEnumerable<ChrisHaniHospital.Models.PatientVitals>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table" id="Table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Patient)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BodyTemparature)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.BloodPressure)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.HeartRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RespiratoryRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OxygenSaturation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PulseRate)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DateRecorded)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Patient.AddressLine1)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BodyTemparature)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.BloodPressure)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.HeartRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RespiratoryRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OxygenSaturation)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PulseRate)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DateRecorded)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#Table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf'
+                ],
+                order: [[1, 'desc']],
+                columnDefs: [
+                    {
+                        targets: 1, // Index of the "Start date" column
+                        render: function (data, type, row) {
+                            if (type === 'sort') {
+                                return new Date(data).getTime(); // Convert date to timestamp for sorting
+                            }
+                            return data;
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

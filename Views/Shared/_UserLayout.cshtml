@@ -12,13 +12,22 @@
     <title>@ViewData["Title"] - E-Prescribing</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/GROUP2.styles.css" asp-append-version="true" />
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="shortcut icon" href="img/icons/icon-48x48.png" />
 
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link rel="icon" type="image/png" sizes="16x16" href="~/images/Logos/favicon.ico">
+    <link rel="stylesheet" href="~/Custom/assets/vendors/iconly/bold.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="~/Custom/assets/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="~/Custom/assets/vendors/bootstrap-icons/bootstrap-icons.css">
+    <link rel="stylesheet" href="~/Custom/assets/css/app.css">
     <link href="~/SideBar/css/app.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 </head>
+@{
+    // Get the current action and controller from the route data
+    var currentAction = (string)ViewContext.RouteData.Values["action"];
+    var currentController = (string)ViewContext.RouteData.Values["controller"];
+}
 <body>
     <div class="wrapper">
         <nav id="sidebar" class="sidebar js-sidebar">
@@ -30,18 +39,18 @@
                 {
                     <ul class="sidebar-nav">
                         <li class="sidebar-header">
-                            Pages
+                         Main Menu
                         </li>
 
-                        <li class="sidebar-item active">
-                            <a class="sidebar-link" href="index.html">
+                        <li class="sidebar-item @("Dashboard".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Nurse".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-action="Administrator" asp-controller="Dashboard">
                                 <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                             </a>
                         </li>
 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-profile.html">
-                                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Profile</span>
+                        <li class="sidebar-item @("UserManagement".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Staff".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-controller="UserManagement" asp-action="Staff">
+                                <i class="align-middle" data-feather="user"></i> <span class="align-middle">Manage Staff</span>
                             </a>
                         </li>
 
@@ -166,35 +175,44 @@
                             Manage Records
                         </li>
 
-                        <li class="sidebar-item active">
-                            <a class="sidebar-link" href="index.html">
+                        <li class="sidebar-item @("Dashboard".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Nurse".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-action="Nurse" asp-controller="Dashboard">
                                 <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
                             </a>
                         </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="HospitalDetails">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Hospital details</span>
+                        <li class="sidebar-item @("Patients".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Booked".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-action="Booked" asp-controller="Patients">
+                                <i class="align-middle" data-feather="users"></i> <span class="align-middle">Booked Patient</span>
                             </a>
                         </li>
+                        <li class="sidebar-item @("Admission".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Index".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Admission">
+                                <i class="align-middle" data-feather="book"></i> <span class="align-middle">Admitted Patients</span>
+                            </a>
+                        </li>       <li class="sidebar-item">
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Conditions">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Conditions</span>
+                            </a>
+                        </li>    
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-sign-in.html">
-                                <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Sign In</span>
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Allergies">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Allergies</span>
+                            </a>
+                        </li> 
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Medications">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Medications</span>
                             </a>
                         </li>
-
+                     
+                        <li class="sidebar-header">
+                            Ward Management
+                        </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-sign-up.html">
-                                <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Wards">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Wards</span>
                             </a>
                         </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-blank.html">
-                                <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
-                            </a>
-                        </li>
-
                         <li class="sidebar-header">
                             Address Management
                         </li>
@@ -222,60 +240,64 @@
                 }
             </div>
         </nav>
-
         <div class="main">
-            <nav class="navbar navbar-expand navbar-light navbar-bg">
+            <nav id="Navbar" class="navbar navbar-expand navbar-light navbar-bg">
                 <a class="sidebar-toggle js-sidebar-toggle">
                     <i class="hamburger align-self-center"></i>
                 </a>
-
                 <div class="navbar-collapse collapse">
                     <ul class="navbar-nav navbar-align">
-
                         <li class="nav-item dropdown">
                             <a class="nav-icon dropdown-toggle d-inline-block d-sm-none" href="#" data-bs-toggle="dropdown">
                                 <i class="align-middle" data-feather="settings"></i>
                             </a>
-
                             <a class="nav-link dropdown-toggle d-none d-sm-inline-block" href="#" data-bs-toggle="dropdown">
                                 <img src="~/SideBar/img/avatars/avatar.jpg" class="avatar img-fluid rounded me-1" alt="Charles Hall" /> <span class="text-dark">@UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName</span>
                             </a>
                             <div class="dropdown-menu dropdown-menu-end">
-                                <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i> Profile</a>
+                                <a class="dropdown-item" href="pages-profile.html"><i class="align-middle me-1" data-feather="user"></i>Profile</a>
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="pie-chart"></i> Analytics</a>
                                 <div class="dropdown-divider"></div>
                                 <a class="dropdown-item" href="index.html"><i class="align-middle me-1" data-feather="settings"></i> Settings & Privacy</a>
                                 <a class="dropdown-item" href="#"><i class="align-middle me-1" data-feather="help-circle"></i> Help Center</a>
                                 <div class="dropdown-divider"></div>
-                                <a class="dropdown-item" href="#">Log out</a>
+                                <a class="dropdown-item" href="#">
+                                    <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                        <button type="submit" class="nav-link btn btn-link text-dark">Logout</button>
+                                    </form>
+                                </a>
                             </div>
                         </li>
                     </ul>
                 </div>
             </nav>
 
-            <div class="container">
+            <div class="container-fluid">
                 <main role="main" class="pb-3">
-                    @* <div class="col-md-8 offset-md-2">
-
-                    </div> *@
+                    <partial name="_Notification" />
                     @RenderBody()
-
                 </main>
             </div>
-            @* <div class="border-top footer text-muted">
-            <div class="container">
-            &copy; 2024 - GROUP2 - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
-            </div>
-            </div> *@
+            
         </div>
     </div>
-
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    @*     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
+
+    @* <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script> *@
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/SideBar/js/app.js"></script>
+    <script src="~/Custom/assets/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+    <script src="~/Custom/assets/js/main.js"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.css" integrity="sha512-3pIirOrwegjM6erE5gPSwkUzO+3cTjpnV9lexlNZqvupR64iZBnOOTiiLPb9M36zpMScbmUNIcHUqKD47M719g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.css" rel="stylesheet">
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+    <script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.js"></script>
+
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

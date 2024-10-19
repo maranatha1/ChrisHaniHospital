@@ -1,5 +1,7 @@
 using ChrisHaniHospital.Areas.Identity.Data;
 using ChrisHaniHospital.Data;
+using ChrisHaniHospital.Models;
+using ChrisHaniHospital.Utilities;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
@@ -109,6 +111,68 @@ using (var scope = app.Services.CreateScope())
                         $"Failed to add user {email} to role {role}: {string.Join(", ", addToRoleResult.Errors.Select(e => e.Description))}"
                     );
                 }
+                if (role == Roles.Surgeon)
+                {
+                    var surgeon = new Surgeon
+                    {
+                        User = user,
+                        UserID = user.Id,
+                        Registration_Number = "12346756"
+                    };
+                    var context = scope.ServiceProvider.GetRequiredService<ChrisHaniContext>();
+                    context.Add(surgeon);
+                    await context.SaveChangesAsync();
+                }
+                else if (role == Roles.Nurse)
+                {
+                    var nurse = new Nurse
+                    {
+                        User = user,
+                        UserID = user.Id,
+                        Registration_Number = "123467656"
+                    };
+                    var context = scope.ServiceProvider.GetRequiredService<ChrisHaniContext>();
+                    context.Add(nurse);
+                    await context.SaveChangesAsync();
+                }
+                else if (role == Roles.Pharmacist)
+                {
+                    var pharmacist = new Pharmacist
+                    {
+                        User = user,
+                        UserID = user.Id,
+                        Registration_Number = "16723456"
+                    };
+                    var context = scope.ServiceProvider.GetRequiredService<ChrisHaniContext>();
+                    context.Add(pharmacist);
+                    await context.SaveChangesAsync();
+                }
+                else if (role == Roles.Anaesthesiologist)
+                {
+                    var anaesthesiologist = new Anaesthesiologist
+                    {
+                        User = user,
+                        UserID = user.Id,
+                        Registration_Number = "123676456"
+                    };
+                    var context = scope.ServiceProvider.GetRequiredService<ChrisHaniContext>();
+                    context.Add(anaesthesiologist);
+                    await context.SaveChangesAsync();
+                }
+                else if (role == Roles.Patient)
+                {
+                    var patient = new Patient
+                    {
+                        UserId = user.Id,
+                        AddressLine1 = "",
+                        DateOfBirth = new DateOnly(1999, 12, 12),
+                        Gender = "Male",
+                        SuburbId = 0
+                    };
+                    var context = scope.ServiceProvider.GetRequiredService<ChrisHaniContext>();
+                    context.Patients.Add(patient);
+                    await context.SaveChangesAsync();
+                }
             }
             else
             {
@@ -119,15 +183,23 @@ using (var scope = app.Services.CreateScope())
             }
         }
     }
-
+    //Chris@2024
     // Create users
     await CreateUser(
-        "Nurse@gmail.com",
+        "Nurse1@gmail.com",
         "Okuhle",
         "Ntshongwa",
         "081 123 4123",
-        "Nurse@123",
-        "Nurse"
+        "P@ssword1",
+        Roles.Nurse
+    );
+    await CreateUser(
+        "Patinet@gmail.com",
+        "Okuhle",
+        "Molele",
+        "081 123 4155",
+        "Patinet@123",
+        Roles.Patient
     );
     await CreateUser(
         "Administrator@gmail.com",

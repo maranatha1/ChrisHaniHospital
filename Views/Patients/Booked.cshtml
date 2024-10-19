@@ -1,0 +1,79 @@
+﻿@using ChrisHaniHospital.Areas.Identity.Data
+@using ChrisHaniHospital.Models
+@{
+    ViewData["Title"] = "Booked";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="m-2">
+    <h1>List of Booked Patients</h1>
+</div>
+<section class="section">
+    <div class="card">
+        <div class="card-header">
+        </div>
+        <div class="card-body">
+            <table class="table table-striped" id="Table">
+                <thead>
+                    <tr>
+                        <th>First Name</th>
+                        <th>Last Name</th>
+                        <th>Identity Number</th>
+                        <th>Email</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (Patient users in ViewBag.Patients)
+                    {
+                        <tr>
+                            <td>@users.User.FirstName</td>
+                            <td>@users.User.LastName</td>
+                            @if(users.User.IdentityNumber != null)
+                            {
+                                <td>@users.User.IdentityNumber</td>
+                            }
+                            else
+                            {
+                                <td>No ID found</td>
+                            }
+                            <td>@users.User.Email</td>
+                            <td>
+                                <a asp-action="Create" asp-controller="Admission" asp-route-PatientID="@users.PatientId" class="btn btn-primary">Admit</a>
+                            </td>
+                        </tr>
+                    }
+
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+</section>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#Table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf'
+                ],
+                order: [[1, 'desc']],
+                columnDefs: [
+                    {
+                        targets: 1, // Index of the "Start date" column
+                        render: function (data, type, row) {
+                            if (type === 'sort') {
+                                return new Date(data).getTime(); // Convert date to timestamp for sorting
+                            }
+                            return data;
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

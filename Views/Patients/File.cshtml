@@ -1,0 +1,569 @@
+﻿@model PatientVM
+@{
+    ViewData["Title"] = "File";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<style>
+
+    .main-body {
+        padding: 15px;
+    }
+
+    .card {
+        box-shadow: 0 1px 3px 0 rgba(0,0,0,.1), 0 1px 2px 0 rgba(0,0,0,.06);
+    }
+
+    .card {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        min-width: 0;
+        word-wrap: break-word;
+        background-color: #fff;
+        background-clip: border-box;
+        border: 0 solid rgba(0,0,0,.125);
+        border-radius: .25rem;
+    }
+
+    .card-body {
+        flex: 1 1 auto;
+        min-height: 1px;
+        padding: 1rem;
+    }
+
+    .gutters-sm {
+        margin-right: -8px;
+        margin-left: -8px;
+    }
+
+    .date-prescribed-column {
+        width: 100px; /* Set the desired width */
+    }
+        .gutters-sm > .col, .gutters-sm > [class*=col-] {
+            padding-right: 8px;
+            padding-left: 8px;
+        }
+
+    .mb-3, .my-3 {
+        margin-bottom: 1rem !important;
+    }
+
+    .bg-gray-300 {
+        background-color: #e2e8f0;
+    }
+
+    .h-100 {
+        height: 100% !important;
+    }
+
+    .shadow-none {
+        box-shadow: none !important;
+    }
+</style>
+<div>
+
+<div class="m-1">
+        <h1 id="Title">Patient Full Medical File</h1>
+        <div class="d-flex justify-content-end  m-2">
+            <button id="Printbtn" onclick="PrintFile()" class="btn btn-primary">Print Patient File</button>
+        </div>
+        <div id="LogoDetails" hidden  class="row mb-4 p-2">
+            <div>
+                <img src="~/images/Logos/logo.png" width="200" alt="Health Sync Logo" />
+            </div>
+            <div class="text-center">
+                <h1>Patient Full Medical File</h1>
+            </div>
+        </div>
+    <div class="container-fluid">
+        <div class="main-body">
+            <div class="row gutters-sm">
+                <div class="col-md-4 mb-3">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="d-flex flex-column align-items-center text-center">
+                                <img src="~/images/user.png" alt="Admin" class="rounded-circle" width="100">
+                                <div class="mt-3">
+                                    <h4>@Model.Patient.User.FirstName @Model.Patient.User.LastName</h4>
+                                    <p class="text-secondary mb-1">@Model.Patient.User.IdentityNumber</p>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-md-8">
+                    <div class="card mb-3">
+                        <div class="card-body">
+
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Email</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Patient.User.Email
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Phone</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Patient.User.PhoneNumber
+                                </div>
+                            </div>
+                            <hr>
+                            <div class="row">
+                                <div class="col-sm-3">
+                                    <h6 class="mb-0">Address</h6>
+                                </div>
+                                <div class="col-sm-9 text-secondary">
+                                    @Model.Patient.AddressLine1, @Model.Patient.AddressLine2, @Model.Patient?.Suburb?.Name, @Model.Patient?.Suburb?.City?.Name, @Model.Patient?.Suburb?.City?.Province?.Name, @Model.Patient?.Suburb?.City?.Province?.Country?.Name
+                                </div>
+                            </div>
+                            <hr>
+
+                        </div>
+                    </div>
+
+
+
+
+                </div>
+            </div>
+            <div class=" mb-3">
+                <div class="">
+                    <div class="row">
+                        <div class="m-2">
+                            <h4>List of Medical Prescriptions</h4>
+
+                            <table class="table table-striped" id="Table7">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            Date Prescribed
+                                        </th>
+                                        <th >
+                                           Status
+                                        </th>
+                                        <td>
+                                            Administered?
+                                        </td>
+                                        <td>
+
+                                        </td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (PrescriptionListVM item in Model.Precriptions)
+                                    {
+                                        <tr>
+                                                <td class="date-prescribed-column">
+                                                @item.Precription?.DatePrescribed.ToString("dd/MM/yyyy")
+                                            </td>
+                                                <td class="date-prescribed-column">
+                                                @item.Precription.Status
+                                            </td>
+                                            @if(item.Precription.Status == "Pending")
+                                            {
+                                                    <td id="Admin" class="date-prescribed-column">
+                                                    <a id="btnAd" onclick="Administer(@item.Precription.Id)" class="btn btn-primary">Administer</a>
+                                                </td>
+                                            }
+                                            else
+                                            {
+                                                    <td class="date-prescribed-column">
+                                                    <span class="text-success">Yes</span>
+                                                </td>
+                                            }
+                                                <td class="date-prescribed-column">
+                                                <a asp-action="Index" asp-controller="AdministeredMedications" asp-route-PresciptionId="@item.Precription.Id" class="btn btn-primary">Administer medication</a>
+                                            </td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div class=" mb-3">
+                <div class="">
+                    <div class="text-end">
+                        <a id="ReadminBtn" asp-action="Create" asp-controller="Admission" asp-route-PatientID="@Model.Patient.PatientId" class="btn btn-primary">Readmit Patient</a>
+                    </div>
+                    <div class="row">
+                        <div class="m-2">
+                            <h4>List of Admission history </h4>
+
+                            <table class="table table-striped" id="Table8">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            Date Admitted
+                                        </th>
+
+                                        <th>
+                                            Surgeon
+                                        </th>
+                                        <th>
+                                            Ward Name
+                                        </th>
+                                        <th>
+                                            Bed No
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (AdmittedPatient item in Model.AdmittedPatient)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.DateAdmitted.ToString("dd/MM/yyyy")
+                                            </td>
+                                            <td>
+                                                @item.Surgeon.User.FirstName  @item.Surgeon.User.LastName
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Ward.Name)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.Bed)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <hr />
+            <div class=" mb-3">
+                <div class="">
+                    <div class="text-end">
+                        <button id="Retake" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Retake New Vitals</button>
+                    </div>
+                    <!-- Modal -->
+                    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-lg">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h1 class="modal-title fs-3 tex-center" id="staticBackdropLabel">Add New Vitals</h1>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <form asp-action="RetakeVitals">
+                                <div class="modal-body">
+                                    <div class="bg-white p-2 mb-3">
+                                        <h4>Vital Details</h4>
+                                        
+                                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                            <input hidden id="PatientID" name="PatientID" asp-for="@Model.Patient.PatientId" />
+                                        <div class="row">
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().BloodPressure" class="control-label"></label>
+                                                    <input name="BloodPressure"  class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().BloodPressure" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().BodyTemparature" class="control-label"></label>
+                                                    <input name="BodyTemparature"  class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().BodyTemparature" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().HeartRate" class="control-label"></label>
+                                                    <input name="HeartRate"  class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().HeartRate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().OxygenSaturation" class="control-label"></label>
+                                                    <input name="OxygenSaturation"  class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().OxygenSaturation" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().RespiratoryRate" class="control-label"></label>
+                                                    <input name="RespiratoryRate" class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().RespiratoryRate" class="text-danger"></span>
+                                            </div>
+                                            <div class="form-group col-md-4">
+                                                <label asp-for="@Model.PatientVitals.FirstOrDefault().PulseRate" class="control-label"></label>
+                                                    <input name="PulseRate"  class="form-control" />
+                                                <span asp-validation-for="@Model.PatientVitals.FirstOrDefault().PulseRate" class="text-danger"></span>
+                                            </div>
+                                        </div>
+                                  
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <button type="submit" class="btn btn-primary">Submit</button>
+                                </div>
+                            </form>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="m-2">
+                            <h4>List of Vital history </h4>
+
+                            <table class="table table-striped" id="Table9">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            Date Vitals Taken
+                                        </th>
+
+                                        <th>
+                                            Blood Pressure
+                                        </th>
+                                        <th>
+                                            Body Temperature
+                                        </th>
+                                        <th>
+                                            HeartRate
+                                        </th><th>
+                                            Oxygen Saturation
+                                        </th><th>
+                                            Respiratory Rate
+                                        </th><th>
+                                            Pulse Rate
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (PatientVitals item in Model.PatientVitals)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.DateRecorded.ToString("dd/MM/yyyy")
+                                            </td>
+                                            <td>
+                                                @item.BloodPressure
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.BodyTemparature)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.HeartRate)
+                                            </td>  <td>
+                                                @Html.DisplayFor(modelItem => item.OxygenSaturation)
+                                            </td> <td>
+                                                @Html.DisplayFor(modelItem => item.RespiratoryRate)
+                                            </td> <td>
+                                                @Html.DisplayFor(modelItem => item.PulseRate)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <hr />
+            <div class=" mb-3">
+                <div class="">
+                        <div class="row">
+                        <div class="m-2">
+                            <h4>List of Conditions and Allergies </h4>
+
+                        <table class="table table-striped" id="Table10">
+                                <thead>
+                                    <tr>
+
+                                        <th>
+                                            Date Vitals Taken
+                                        </th>
+
+                                        <th>
+                                            Blood Pressure
+                                        </th>
+                                        <th>
+                                            Body Temperature
+                                        </th>
+                                        <th>
+                                            HeartRate
+                                        </th><th>
+                                            Oxygen Saturation
+                                        </th><th>
+                                            Respiratory Rate
+                                        </th><th>
+                                            Pulse Rate
+                                        </th>
+
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (PatientVitals item in Model.PatientVitals)
+                                    {
+                                        <tr>
+                                            <td>
+                                                @item.DateRecorded.ToString("dd/MM/yyyy")
+                                            </td>
+                                            <td>
+                                                @item.BloodPressure
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.BodyTemparature)
+                                            </td>
+                                            <td>
+                                                @Html.DisplayFor(modelItem => item.HeartRate)
+                                            </td>  <td>
+                                                @Html.DisplayFor(modelItem => item.OxygenSaturation)
+                                            </td> <td>
+                                                @Html.DisplayFor(modelItem => item.RespiratoryRate)
+                                            </td> <td>
+                                                @Html.DisplayFor(modelItem => item.PulseRate)
+                                            </td>
+
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    </div>
+                </div>
+                <hr />
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.js"></script>
+<script>
+
+    function PrintFile() {
+        var table7 = $('#Table7').DataTable();
+        $('#LogoDetails').removeAttr('hidden');
+        $('#Printbtn').attr('hidden', true);
+        $('#Retake').attr('hidden', true);
+        $('#ReadminBtn').attr('hidden', true);
+        $('#Navbar').attr('hidden', true);
+        $('#sidebar').attr('hidden', true);
+        $('#Title').attr('hidden', true);
+        table7.column(3).visible(false);
+        // $('#filterDiv').attr('hidden', true);
+        window.print();
+        table7.column(3).visible(true);
+        $('#LogoDetails').attr('hidden', true);
+        $('#Printbtn').removeAttr('hidden');
+        $('#Navbar').removeAttr('hidden');
+        $('#Title').removeAttr('hidden');
+        $('#ReadminBtn').removeAttr('hidden');
+        $('#Retake').removeAttr('hidden');
+        $('#sidebar').removeAttr('hidden');
+        $('#filterDiv').removeAttr('hidden');
+
+    }
+    function Administer(PrescriptionId) {
+
+            var PatientId = $('#PatientID').val();
+        $.ajax({
+            url: `/api/Main/Administer/${PatientId}/${PrescriptionId}`,
+            type: 'Post',
+            success: function (data) {
+                var element = document.getElementById("btnAd"); // Replace "elementId" with the actual ID of the element you want to hide
+                element.style.display = "none";
+                document.getElementById("Admin").innerHTML = '<span class="text-success">Yes</span>';
+                toastr.success('Prescription update succesfully, please administer the prescriped medication');
+            },
+            error: function (xhr, status, error) {
+                console.error('Error:', error);
+                toastr.error('Failed to update Prescription');
+            }
+        });
+    }
+    $(document).ready(function () {
+        $('#Table6').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+         table7 = $('#Table7').DataTable({
+
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        }); $('#Table8').DataTable({
+
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        }); $('#Table9').DataTable({
+
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        }); $('#Table10').DataTable({
+
+            order: [[0, 'desc']],
+            columnDefs: [
+                {
+                    targets: 0, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+    });
+</script>

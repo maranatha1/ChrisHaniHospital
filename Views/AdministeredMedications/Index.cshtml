@@ -1,0 +1,309 @@
+﻿@model ChrisHaniHospital.Models.AdministeredVM
+
+@{
+    ViewData["Title"] = "Administer Medications";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<section>
+    <div class="card">
+        <div class="card-header">
+            <h2>Administer Medications</h2>
+        </div>
+        <input id="PrescriptionId" hidden type="text" value="@Model.Precription.Id" />
+        <div class="m-4">
+            <h6><strong>Prescription details</strong></h6>
+            <div>
+                <p>Patient Full Name: @Model.Precription?.Patient?.User?.FirstName @Model.Precription?.Patient?.User?.LastName</p>
+                <p>Prescription Date: @Model.Precription?.DatePrescribed.ToString("dd/MMMM/yyyy")</p>
+            </div>
+            <div class="row">
+                <div class="form-group col-md-6">
+                    <label class="control-label">Select Prescribed Medication</label>
+                    <select name="MedicationID" id="Medication" class="form-control">
+                        <option value="">Select Select Prescribed Medication</option>
+                        @foreach (PrescriptionMedication item in Model.PrescriptionListVM.Medications)
+                        {
+
+                            <option value="@item.MedicationId">@item.Medication?.MedicationName (Quantity: @item.Quantity, Instructions: @item.Instructions)</option>
+                        }
+                    </select>
+                </div>
+                <div class="form-group col-md-6">
+                    <label class="control-label">Quantity of Medicine administered</label>
+                    <input id="Quantity" class="form-control" />
+                    <span class="text-danger"></span>
+                </div>
+                <div class="col-12 form-group">
+                    <label class="control-label">Additional Notes</label>
+                    <textarea class="form-control" placeholder="Additional Notes" id="MedicationNotes" rows="3">
+
+                    </textarea>
+                </div>
+                <div class="d-flex mt-1 align-content-end justify-content-end">
+                    <button onclick="Aminister()" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .5rem;"
+                            type="button" class="btn btn-primary btn-sm ms-auto">
+                        Administer Selected Medication
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="card-body">
+            <div class="card-body">
+                <table class="table table-striped" id="Table">
+                    <thead>
+                        <tr>
+                            <th>
+                                Date
+                            </th>
+                            <th>
+                                Time
+                            </th>
+                            <th>
+                                Medication Name
+                            </th>
+                            <th>
+                                Quantity Administered
+                            </th>
+                            <th>Notes</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model.AdministeredMedications)
+                        {
+                            <tr>
+                                <td>@item.AdministeredDate?.ToString("dd/MM/yyyy")</td>
+                                <td>@item.AdministeredDate?.ToString("HH:mm")</td>
+                                <td>@item.Medication?.MedicationName</td>
+                                <td>@item?.Quantity</td>
+                                <td>@item.Notes</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function RemoveActive(PatientId, AllergyId, text) {
+            $.ajax({
+                url: `/api/Main/RemoveMedication/${PatientId}/${AllergyId}`,
+                type: 'DELETE',
+                success: function (data) {
+                    // Remove the list item from the DOM
+                    $(`#AddedMedications li:has(i[onclick="RemoveActive(${PatientId},${AllergyId},'${text}')"])`).remove();
+                    // Add the removed allergy back to the select element
+                    $('#Medication').append(new Option(text, AllergyId));
+                    toastr.success('Medication Removed');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error('Failed to remove Medication');
+                }
+            });
+        }
+        function Aminister() {
+            var MedicationId = $('#Medication').val();
+            var MedicationText = $('#Medication option:selected').text(); // Get the selected text
+            var PrescriptionId = $('#PrescriptionId').val();
+            var Quantity = $('#Quantity').val();
+            var Instructions = $('#MedicationNotes').val();
+            if (MedicationId && Quantity) {
+
+                var AddAdministerdMedicationVM = {
+                    MedicationId: MedicationId,
+                    Quantity: Quantity,
+                    Notes: Instructions,
+                    PrescriptionId: PrescriptionId ? PrescriptionId : 0,
+                };
+
+                $.ajax({
+                    url: '/api/Main/AddministerMedication',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(AddAdministerdMedicationVM),
+                    success: function (data) {
+                        toastr.success('Medication Administer successfully');
+                        setTimeout(function () {
+                            window.location.href = `AdministeredMedications?PresciptionId=${PrescriptionId}`;
+                        }, 2000);
+
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                        toastr.error('Something went wrong');
+                    }
+                });
+            }
+            else {
+                toastr.error('Please enter all required fields');
+            }
+        }
+        function Save() {
+            var MedicationId = $('#Medication').val();
+            var MedicationText = $('#Medication option:selected').text(); // Get the selected text
+            var PrescriptionId = $('#PrescriptionId').val();
+            var PatientId = $('#PatientId').val();
+            var Quantity = $('#Quantity').val();
+            var Instructions = $('#MedicationNotes').val();
+            if (MedicationId && Quantity && PatientId) {
+
+                var PrescriptionMedicationAddVM = {
+                    MedicationId: MedicationId,
+                    Quantity: Quantity,
+                    Instructions: Instructions,
+                    PrescriptionId: PrescriptionId ? PrescriptionId : 0,
+                    PatientId: PatientId
+                };
+
+                $.ajax({
+                    url: '/api/Main/PrescriptionMedication',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PrescriptionMedicationAddVM),
+                    success: function (data) {
+                        var list = `<li>${MedicationText} (Notes: ${$('#MedicationNotes').val() ? $('#MedicationNotes').val() : 'None'})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveActive(${MedicationId},${data.id},'${MedicationText}')"></i></li>`;
+                        $("#AddedMedications").append(list);
+                        $('#Medication option:selected').remove();
+                        $('#PatientId').prop('disabled', true);
+                        document.getElementById('PrescriptionId').value = data.id;
+                        toastr.success('Medication Added to prescrition');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please enter all required fields');
+            }
+        }
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": false,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $('#suburbSelect').change(function () {
+                var suburbId = $(this).val();
+                var formData = {
+                    suburbId: suburbId
+                };
+                if (suburbId) {
+                    $.ajax({
+                        url: '/api/Main/GetCityAndProvince',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                console.log(data);
+                                $('#cityInput').val(data.city);
+                                $('#provinceInput').val(data.province);
+                            } else {
+                                $('#cityInput').val('');
+                                $('#provinceInput').val('');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            $('#WardSelect').change(function () {
+                var WardID = $(this).val();
+                var formData = {
+                    WardID: WardID
+                };
+                if (WardID) {
+                    $.ajax({
+                        url: '/api/Main/GetWardID',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                $('#BedSelect').empty();
+                                var i = 1;
+                                console.log(data.ward.numberOFBeds);
+                                while (i <= data.ward.numberOFBeds) {
+                                    $('#BedSelect').append($('<option>', {
+                                        value: i,
+                                        text: "Bed " + i
+                                    }));
+                                    i++;
+                                }
+                            }
+                            else {
+                                $('#BedSelect').empty();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            const nextButtons = document.querySelectorAll('#nextButton');
+            const backButtons = document.querySelectorAll('#backButton');
+            const tabs = document.querySelectorAll('.tab-pane');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            let currentIndex = 0;
+
+            function updateTabs(index) {
+                tabs.forEach((tab, i) => {
+                    tab.classList.toggle('show', i === index);
+                    tab.classList.toggle('active', i === index);
+                });
+                tabButtons.forEach((button, i) => {
+                    button.classList.toggle('active', i === index);
+                });
+            }
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex < tabs.length - 1) {
+                        currentIndex++;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+        });
+    </script>
+}
+

@@ -21,6 +21,11 @@ namespace ChrisHaniHospital.Controllers
             return View();
         }
 
+        public IActionResult Nurse()
+        {
+            return View();
+        }
+
         public IActionResult Administrator()
         {
             return View();

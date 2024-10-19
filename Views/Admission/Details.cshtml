@@ -1,0 +1,122 @@
+﻿@* @model AdmittedVM
+
+@{
+    ViewData["Title"] = "Details";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<h1>Details</h1>
+
+<div>
+    <h4>AdmittedVM</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ward)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ward.Name)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateAdmitted)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateAdmitted)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Surgeon)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Surgeon.Registration_Number)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AddressLine1)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddressLine1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AddressLine2)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddressLine2)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Suburb)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Suburb.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Allergies)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Allergies.AllergyName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Conditions)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Conditions.ConditionName)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Medication)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Medication.Dosage)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AddressLine1)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BodyTemparature)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BodyTemparature)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.BloodPressure)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.BloodPressure)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.HeartRate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.HeartRate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.RespiratoryRate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.RespiratoryRate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.OxygenSaturation)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.OxygenSaturation)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.PulseRate)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.PulseRate)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DateRecorded)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DateRecorded)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
+    <a asp-action="Index">Back to List</a>
+</div>
+ *@

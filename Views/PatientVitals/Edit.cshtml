@@ -1,0 +1,67 @@
+﻿@model ChrisHaniHospital.Models.PatientVitals
+
+@{
+    ViewData["Title"] = "Edit";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<h1>Edit</h1>
+
+<h4>PatientVitals</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="PatientId" class="control-label"></label>
+                <select asp-for="PatientId" class="form-control" asp-items="ViewBag.PatientId"></select>
+                <span asp-validation-for="PatientId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BodyTemparature" class="control-label"></label>
+                <input asp-for="BodyTemparature" class="form-control" />
+                <span asp-validation-for="BodyTemparature" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="BloodPressure" class="control-label"></label>
+                <input asp-for="BloodPressure" class="form-control" />
+                <span asp-validation-for="BloodPressure" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="HeartRate" class="control-label"></label>
+                <input asp-for="HeartRate" class="form-control" />
+                <span asp-validation-for="HeartRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="RespiratoryRate" class="control-label"></label>
+                <input asp-for="RespiratoryRate" class="form-control" />
+                <span asp-validation-for="RespiratoryRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OxygenSaturation" class="control-label"></label>
+                <input asp-for="OxygenSaturation" class="form-control" />
+                <span asp-validation-for="OxygenSaturation" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="PulseRate" class="control-label"></label>
+                <input asp-for="PulseRate" class="form-control" />
+                <span asp-validation-for="PulseRate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateRecorded" class="control-label"></label>
+                <input asp-for="DateRecorded" class="form-control" />
+                <span asp-validation-for="DateRecorded" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

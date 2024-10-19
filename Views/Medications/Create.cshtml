@@ -1,0 +1,53 @@
+﻿@using ChrisHaniHospital.Utilities
+@model ChrisHaniHospital.Models.Medication
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="m-2">
+    <h4>Add New Medication</h4>
+    <hr />
+    <div class="row">
+        <div class="col-md-4">
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                <div class="form-group">
+                    <label asp-for="MedicationName" class="control-label"></label>
+                    <input asp-for="MedicationName" class="form-control" />
+                    <span asp-validation-for="MedicationName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Schedule" class="control-label"></label>
+                    <input asp-for="Schedule" class="form-control" />
+                    <span asp-validation-for="Schedule" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Dosage" class="control-label"></label>
+                    <Select asp-for="Dosage" class="form-control">
+                        <option value="@DosageForm.Capsule">@DosageForm.Capsule</option>
+                        <option value="@DosageForm.Drops">@DosageForm.Drops</option>
+                        <option value="@DosageForm.Gel">@DosageForm.Gel</option>
+                        <option value="@DosageForm.Injectable">@DosageForm.Injectable</option>
+                        <option value="@DosageForm.IVDrip">@DosageForm.IVDrip</option>
+                        <option value="@DosageForm.Lotion">@DosageForm.Lotion</option>
+                        <option value="@DosageForm.Spray">@DosageForm.Spray</option>
+                        <option value="@DosageForm.Suspension">@DosageForm.Suspension</option>
+                        <option value="@DosageForm.Syrup">@DosageForm.Syrup</option>
+                    </Select>
+                    <span asp-validation-for="Dosage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+

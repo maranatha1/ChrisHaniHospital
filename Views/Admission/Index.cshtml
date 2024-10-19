@@ -1,0 +1,97 @@
+﻿@model IEnumerable<AdmittedPatient>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<div class="m-2">
+    <h1>List of Admitted Patients</h1>
+</div>
+    <section class="section">
+        <div class="card">
+            <div class="card-header">
+            </div>
+            <div class="card-body">
+                <table class="table table-striped" id="Table">
+        <thead>
+            <tr>
+               
+                <th>
+                   Date Admitted
+                </th>
+                <th>
+                    FirstName
+                </th>  <th>
+                    LastName
+                </th> 
+                <th>
+                   IdentityNumber
+                </th>
+                <th>
+                    Surgeon
+                </th>
+                <th>
+                   Ward Name
+                </th>   
+                <th>
+                   Bed No
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.DateAdmitted.ToString("dd/MM/yyyy")
+                    </td>
+                    <td>
+                        @item.Patient.User.FirstName
+                    </td>
+                    <td>
+                        @item.Patient.User.LastName
+                    </td> <td>
+                        @item.Patient.User.IdentityNumber
+                    </td>
+                    <td>
+                        @item.Surgeon.User.FirstName  @item.Surgeon.User.LastName
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ward.Name)
+                    </td> <td>
+                        @Html.DisplayFor(modelItem => item.Bed)
+                    </td>
+                    <td>
+                        <a class="btn btn-primary" asp-action="File" asp-controller="Patients" asp-route-PatientID="@item.PatinetId">View File</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#Table').DataTable({
+                dom: 'Bfrtip',
+                buttons: [
+                    'copy', 'csv', 'excel', 'pdf'
+                ],
+                order: [[1, 'desc']],
+                columnDefs: [
+                    {
+                        targets: 1, // Index of the "Start date" column
+                        render: function (data, type, row) {
+                            if (type === 'sort') {
+                                return new Date(data).getTime(); // Convert date to timestamp for sorting
+                            }
+                            return data;
+                        }
+                    }
+                ]
+            });
+        });
+    </script>
+}

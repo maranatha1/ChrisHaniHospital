@@ -1,0 +1,554 @@
+﻿@model AdmittedVM
+@using ChrisHaniHospital.Models
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="m-3">
+    <h4>Admitting New Patient</h4>
+    <hr />
+    <form asp-action="Create">
+        <div class="container-fluid bg-white border-1 rounded-2 m-1 p-3 ">
+            <ul class="nav  nav-tabs mb-3 w-100 row " id="pills-tab" role="tablist">
+                <li class="col nav-item" role="presentation">
+                    <button class="nav-link w-100 active tab-btn" id="property-Overview-tab" data-bs-toggle="tab" data-bs-target="#property-Overview" type="button" role="tab" aria-controls="property-Overview" aria-selected="true">Patient Details</button>
+                </li>
+                <li class="col nav-item b-danger" role="presentation">
+                    <button class="nav-link w-100 tab-btn" id="pills-Listing-tab" data-bs-toggle="tab" data-bs-target="#pills-Listing" type="button" role="tab" aria-controls="pills-Listing" aria-selected="false">Medication details</button>
+                </li>
+                <li class="col nav-item" role="presentation">
+                    <button class="nav-link w-100 tab-btn" id="pills-Vitals-tab" data-bs-toggle="tab" data-bs-target="#pills-Vitals" type="button" role="tab" aria-controls="pills-Vitals" aria-selected="false">Vital Details</button>
+                </li>
+
+            </ul>
+            <div class="tab-content" id="Property-DiscountsContent">
+                <div class="tab-pane fade show  active m-0  col-12" id="property-Overview" role="tabpanel" aria-labelledby="property-Overview-tab" tabindex="0">
+                    <div class="row">
+                        <div class="col-12">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <input hidden asp-for="PatientId" id="PatientID" />
+                            <div class="bg-white p-2 mb-3">
+                                <h4>Patient Details</h4>
+                                <div class="form-group">
+                                    <label asp-for="DateAdmitted" class="control-label"> Date and Time Admitted</label>
+                                    <input disabled class="form-control" value="@ViewBag.Date" />
+                                    <span asp-validation-for="DateAdmitted" class="text-danger"></span>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="FirstName" class="control-label"></label>
+                                        <input disabled asp-for="FirstName" class="form-control" />
+                                        <span asp-validation-for="FirstName" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="LastName" class="control-label"></label>
+                                        <input disabled asp-for="LastName" class="form-control" />
+                                        <span asp-validation-for="LastName" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="IdentityNumber" class="control-label">Identity Number</label>
+                                        <input asp-for="IdentityNumber" class="form-control" />
+                                        <span asp-validation-for="IdentityNumber" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="PhoneNumber" class="control-label">Phone Number</label>
+                                        <input asp-for="PhoneNumber" class="form-control" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Email" class="control-label"></label>
+                                        <input  asp-for="Email" class="form-control" />
+                                        <span asp-validation-for="Email" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="SurgeonID" class="control-label">Surgeon</label>
+                                        <select asp-for="SurgeonID" class="form-control" asp-items="ViewBag.SurgeonID"></select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label asp-for="AddressLine1" class="control-label"></label>
+                                        <input asp-for="AddressLine1" class="form-control" />
+                                        <span asp-validation-for="AddressLine1" class="text-danger"></span>
+                                    </div>
+                                    <div class="form-group">
+                                        <label asp-for="AddressLine2" class="control-label"></label>
+                                        <input asp-for="AddressLine2" class="form-control" />
+                                        <span asp-validation-for="AddressLine2" class="text-danger"></span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-4">
+                                        <label asp-for="SuburbId" class="control-label">Select Suburb</label>
+                                        <select asp-for="SuburbId" name="SuburbId" class="form-control" asp-items="ViewBag.SuburbId" id="suburbSelect">
+                                            <option value="">Select Suburb</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="control-label">City</label>
+                                        <input disabled id="cityInput" class="form-control" />
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label class="control-label">Province</label>
+                                        <input disabled id="provinceInput" class="form-control" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="WardId" class="control-label">Select a Ward</label>
+
+                                        <select name="WardId" id="WardSelect" asp-for="WardId" class="form-control" asp-items="ViewBag.WardId">
+                                            <option value="">Select Ward</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label asp-for="Bed" class="control-label"></label>
+                                        <select asp-for="Bed" id="BedSelect" class="form-control"></select>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="form-group">
+
+                                <button type="button" class="btn btn-primary" id="nextButton">Next</button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade m-0  col-12" id="pills-Listing" role="tabpanel" aria-labelledby="pills-Listing-tab" tabindex="0">
+                    <div class="bg-white p-2 mb-3">
+                        <h5>Medical conditions and Allergies Details</h5>
+                        <div class="row border border-1 rounded m-1">
+                            <div class="form-group col-md-6">
+                                <label asp-for="AlergyID" class="control-label"></label>
+                                <select id="Allergy" class="form-control">
+                                    <option value="" selected disabled>Select Allergy</option>
+                                    @foreach (Allergies allergy in ViewBag.AlergyID)
+                                    {
+                                        <option value="@allergy.Id">@allergy.AllergyName</option>
+                                    }
+                                </select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="AllergiesNote" class="control-label">Allergies Note</label>
+                                <input id="AllergiesNote" asp-for="AllergiesNote" class="form-control" />
+                                <span asp-validation-for="AllergiesNote" class="text-danger"></span>
+                            </div>
+
+
+
+                            <div class="d-flex mt-1 align-content-end justify-content-end">
+                                <button onclick="AddAllergy()" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .5rem;"
+                                        type="button" class="btn btn-primary btn-sm ms-auto">
+                                    Add Selected Allergy
+                                </button>
+                            </div>
+
+
+                            <div>
+                                <h6>Added patient allergies</h6>
+                                <ol id="ActiveAllergies">
+                                </ol>
+
+                            </div>
+                        </div>
+
+                        <div class="row border border-1 rounded  m-1">
+                            <div class="form-group col-md-6">
+                                <label asp-for="ConditionID" class="control-label">Condition</label>
+                                <select id="Condition" asp-for="ConditionID" class="form-control" asp-items="ViewBag.ConditionID"></select>
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label asp-for="ConditionNote" class="control-label">Condition Note</label>
+                                <input id="ConditionNote" asp-for="ConditionNote" class="form-control" />
+                                <span asp-validation-for="ConditionNote" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex mt-1 align-content-end justify-content-end">
+                                <button onclick="AddCondition()" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .5rem;"
+                                        type="button" class="btn btn-primary btn-sm ms-auto">
+                                    Add Selected Condition
+                                </button>
+                            </div>
+                            <div>
+                                <h6>Added patient Conditions</h6>
+                                <ol id="ActiveCondition">
+                                </ol>
+
+                            </div>
+                        </div>
+                        <div class="row border border-1 rounded m-1">
+                            <div class="form-group col-md-4">
+                                <label asp-for="MedicationID" class="control-label"> Current Medication</label>
+                                <select id="Medication" asp-for="MedicationID" class="form-control" asp-items="ViewBag.MedicationID"></select>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="MedicationID" class="control-label">Quantity</label>
+                                <input asp-for="Quantity" class="form-control" />
+                                <span asp-validation-for="Quantity" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="Instruction" class="control-label">Instruction Note</label>
+                                <input id="MedicationNotes" asp-for="Instruction" class="form-control" />
+                                <span asp-validation-for="Instruction" class="text-danger"></span>
+                            </div>
+                            <div class="d-flex mt-1 align-content-end justify-content-end">
+                                <button onclick="AddMedication()" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .5rem;"
+                                        type="button" class="btn btn-primary btn-sm ms-auto">
+                                    Add Current Medication
+                                </button>
+                            </div>
+                            <div>
+                                <h6>Current Patient Medication</h6>
+                                <ol id="ActiveMedication">
+                                </ol>
+
+                            </div>
+                        </div>
+                    </div>
+                    <button type="button" class="btn btn-secondary" id="backButton">Back</button>
+                    <button type="button" class="btn btn-primary" id="nextButton">Next</button>
+                </div>
+                <div class="tab-pane fade  m-0 col-12" id="pills-Vitals" role="tabpanel" aria-labelledby="pills-Vitals-tab" tabindex="0">
+                    <div class="bg-white p-2 mb-3">
+                        <h5>Vital Details</h5>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <label asp-for="BodyTemparature" class="control-label"></label>
+                                <input type="number" max=37 min=34 asp-for="BodyTemparature" class="form-control" />
+                                <span asp-validation-for="BodyTemparature" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="BloodPressure" class="control-label"></label>
+                                <input asp-for="BloodPressure" class="form-control" />
+                                <span asp-validation-for="BloodPressure" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="HeartRate" class="control-label"></label>
+                                <input type="number" max=100 min=60 asp-for="HeartRate" class="form-control" />
+                                <span asp-validation-for="HeartRate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="RespiratoryRate" class="control-label"></label>
+                                <input asp-for="RespiratoryRate" class="form-control" />
+                                <span asp-validation-for="RespiratoryRate" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="OxygenSaturation" class="control-label"></label>
+                                <input type="number" max=100 min=95 asp-for="OxygenSaturation" class="form-control" />
+                                <span asp-validation-for="OxygenSaturation" class="text-danger"></span>
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label asp-for="PulseRate" class="control-label"></label>
+                                <input asp-for="PulseRate" class="form-control" />
+                                <span asp-validation-for="PulseRate" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="button" class="btn btn-secondary" id="backButton">Back</button>
+                            <input type="submit" class="btn btn-primary" value="Admit Patient"/>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function RemoveActive(PatientId, AllergyId, text) {
+            $.ajax({
+                url: `/api/Main/RemovePatientAllergy/${PatientId}/${AllergyId}`,
+                type: 'DELETE',
+                success: function (data) {
+                    // Remove the list item from the DOM
+                    $(`#ActiveAllergies li:has(i[onclick="RemoveActive(${PatientId},${AllergyId},'${text}')"])`).remove();
+                    // Add the removed allergy back to the select element
+                    $('#Allergy').append(new Option(text, AllergyId));
+                    toastr.success('Allergy Removed');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error('Failed to remove allergy');
+                }
+            });
+        }
+        function RemoveMedication(PatientId, MedicationId, text) {
+            $.ajax({
+                url: `/api/Main/RemovePatientMedication/${PatientId}/${MedicationId}`,
+                type: 'DELETE',
+                success: function (data) {
+                    // Remove the list item from the DOM
+                    $(`#ActiveMedication li:has(i[onclick="RemoveMedication(${PatientId},${MedicationId},'${text}')"])`).remove();
+                    // Add the removed allergy back to the select element
+                    $('#Medication').append(new Option(text, MedicationId));
+                    toastr.success('Medication Removed');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error('Failed to remove Medication');
+                }
+            });
+        }
+
+        function RemoveCondition(ConditionId, PatientId, ConditionText) {
+            $.ajax({
+                url: `/api/Main/RemovePatientCondition/${PatientId}/${ConditionId}`,
+                type: 'DELETE',
+                success: function (data) {
+                    // Remove the list item from the DOM
+                    $(`#ActiveCondition li:has(i[onclick="RemoveCondition(${PatientId},${ConditionId},'${ConditionText}')"])`).remove();
+                    // Add the removed allergy back to the select element
+                    $('#Condition').append(new Option(ConditionText, ConditionId));
+
+                    toastr.success('patient condition deleted');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error('Failed to remove condition');
+                }
+            });
+        }
+        function AddAllergy() {
+    
+            var AllergyId = $('#Allergy').val();
+            var AllergyIdText = $('#Allergy option:selected').text(); // Get the selected text
+
+            var PatientId = $('#PatientID').val();
+            if (PatientId && AllergyId) {
+
+                var PatientAllergies = {
+                    PatientId: PatientId,
+                    AllergyId: AllergyId,
+                    AllergyNotes: $('#AllergiesNote').val() ? $('#AllergiesNote').val() : null
+                };
+
+                $.ajax({
+                    url: '/api/Main/AddPatientAllergies',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PatientAllergies),
+                    success: function (data) {
+                        var list = `<li>${AllergyIdText} (Notes: ${$('#AllergiesNote').val() ? $('#AllergiesNote').val() : ''})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveActive(${AllergyId},${PatientId},'${AllergyIdText}')"></i></li>`;
+
+                        $("#ActiveAllergies").append(list);
+                        $('#Allergy option:selected').remove();
+                        document.getElementById('AllergiesNote').value = '';
+                        toastr.success('Allergy Added');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please select Allergy');
+            }
+
+
+
+        }
+        function AddMedication() {
+
+            var MedicationId = $('#Medication').val();
+            var MedicationText = $('#Medication option:selected').text(); // Get the selected text
+
+            var PatientId = $('#PatientID').val();
+            if (PatientId && MedicationId) {
+                var PatientMedication = {
+                    PatientId: PatientId,
+                    MedicationId: MedicationId,
+                    MedicationNotes: $('#MedicationNotes').val() ? $('#MedicationNotes ').val() : null
+                };
+                $.ajax({
+                    url: '/api/Main/AddPatientMedication',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PatientMedication),
+                    success: function (data) {
+                        var list = `<li>${MedicationText} (Notes: ${$('#MedicationNotes').val() ? $('#MedicationNotes').val() : ''})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveMedication(${PatientId},${MedicationId},'${MedicationText}')"></i></li>`;
+                        $("#ActiveMedication").append(list);
+                        $('#Medication option:selected').remove();
+                        document.getElementById('MedicationNotes').value = '';
+                        toastr.success('Medication  Added');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please select Allergy');
+            }
+
+
+
+        } 
+        function AddCondition() {
+
+            var ConditionId = $('#Condition').val();
+            var ConditionText = $('#Condition option:selected').text(); // Get the selected text
+
+            var PatientId = $('#PatientID').val();
+            if (PatientId && ConditionId) {
+                var PatientConditions = {
+                    PatientId: PatientId,
+                    ConditionId: ConditionId,
+                    ConditionNotes: $('#ConditionNote').val() ? $('#ConditionNote').val() : null
+                };
+                $.ajax({
+                    url: '/api/Main/AddPatientCondition',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PatientConditions),
+                    success: function (data) {
+                        var list = `<li>${ConditionText} (Notes: ${$('#ConditionNote').val() ? $('#ConditionNote').val() : ''})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveCondition(${ConditionId},${PatientId},'${ConditionText}')"></i></li>`;
+                        $("#ActiveCondition").append(list);
+                        $('#Condition option:selected').remove();
+                        document.getElementById('ConditionNote').value = '';
+                        toastr.success('Condition Added');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please select Allergy');
+            }
+
+
+
+        }
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": false,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $('#suburbSelect').change(function () {
+                var suburbId = $(this).val();
+                var formData = {
+                    suburbId: suburbId
+                };
+                if (suburbId) {
+                    $.ajax({
+                        url: '/api/Main/GetCityAndProvince',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                console.log(data);
+                                $('#cityInput').val(data.city);
+                                $('#provinceInput').val(data.province);
+                            } else {
+                                $('#cityInput').val('');
+                                $('#provinceInput').val('');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            $('#WardSelect').change(function () {
+                var WardID = $(this).val();
+                var formData = {
+                    WardID: WardID
+                };
+                if (WardID) {
+                    $.ajax({
+                        url: '/api/Main/GetWardID',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                $('#BedSelect').empty();
+                                var i = 1;
+                                console.log(data.ward.numberOFBeds);
+                                while (i <= data.ward.numberOFBeds) {
+                                    $('#BedSelect').append($('<option>', {
+                                        value: i,
+                                        text: "Bed " + i
+                                    }));
+                                    i++;
+                                }
+                            }
+                            else {
+                                $('#BedSelect').empty();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            const nextButtons = document.querySelectorAll('#nextButton');
+            const backButtons = document.querySelectorAll('#backButton');
+            const tabs = document.querySelectorAll('.tab-pane');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            let currentIndex = 0;
+
+            function updateTabs(index) {
+                tabs.forEach((tab, i) => {
+                    tab.classList.toggle('show', i === index);
+                    tab.classList.toggle('active', i === index);
+                });
+                tabButtons.forEach((button, i) => {
+                    button.classList.toggle('active', i === index);
+                });
+            }
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex < tabs.length - 1) {
+                        currentIndex++;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+        });
+    </script>
+}

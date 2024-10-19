@@ -11,4 +11,5 @@ public class ChrisHaniUser : IdentityUser
 {
     public string FirstName { get; set; }
     public string LastName { get; set; }
+    public string? IdentityNumber { get; set; }
 }

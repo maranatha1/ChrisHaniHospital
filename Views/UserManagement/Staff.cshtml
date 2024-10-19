@@ -1,0 +1,241 @@
+﻿@model ChrisHaniHospital.Models.StaffVM
+@{
+    ViewData["Title"] = "Staff";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+<div class="m-2">
+    <a asp-controller="UserManagement" asp-action="Create" class="btn btn-primary">Add New Staff</a>
+</div>
+<div class="bg-white card-box p0 border-20">
+    <ul class="nav nav-tabs" id="reservationTab" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="current-tab" data-bs-toggle="tab" href="#current" role="tab" aria-controls="current" aria-selected="true">ANEASTHESIOLOGIST</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="NURSES-tab" data-bs-toggle="tab" href="#NURSES" role="tab" aria-controls="NURSES" aria-selected="true">NURSES</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="SURGEONS-tab" data-bs-toggle="tab" href="#SURGEONS" role="tab" aria-controls="SURGEONS" aria-selected="true">SURGEONS</a>
+        </li> 
+        <li class="nav-item">
+            <a class="nav-link" id="PHARMACISTS-tab" data-bs-toggle="tab" href="#PHARMACISTS" role="tab" aria-controls="PHARMACISTS" aria-selected="true">PHARMACISTS</a>
+        </li>
+    </ul>
+    <div class="tab-content" id="reservationTabContent">
+        <div class="tab-pane fade show active" id="current" role="tabpanel" aria-labelledby="current-tab">
+            <div class="bg-white card-box p0 border-20  m-3">
+                <div class="table-responsive pt-25 pb-25 pe-4 ps-4">
+                    
+                    <table id="Table" class="table property-list-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">NAME</th>
+
+                                <th scope="col">SURNAME</th>
+                                <th scope="col">CONTACT NUMBER</th>
+                                <th scope="col">E-MAIL ADDRESS</th>
+                                <th scope="col">HEALTH COUNCIL REGISTRATION NUMBER</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-0">
+                            @foreach ( Anaesthesiologist item in Model.Anaesthesiologist)
+                            {
+                                <tr>
+                                    <td>@item.User.FirstName</td>
+                                    <td>@item.User.LastName</td>
+                                    <td>@item.User.PhoneNumber</td>
+                                    <td>@item.User.Email</td>
+                                    <td>@item.Registration_Number</td>
+                                    
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- /.table property-list-table -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="NURSES" role="tabpanel" aria-labelledby="NURSES-tab">
+            <div class="bg-white card-box p0 border-20 m-3">
+                
+                <div class="table-responsive pt-25 pb-25 pe-4 ps-4">
+                  
+                    <table id="Table2" class="table property-list-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">NAME</th>
+
+                                <th scope="col">SURNAME</th>
+                                <th scope="col">CONTACT NUMBER</th>
+                                <th scope="col">E-MAIL ADDRESS</th>
+                                <th scope="col">HEALTH COUNCIL REGISTRATION NUMBER</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-0">
+                            @foreach (Nurse item in Model.Nurse)
+                            {
+                                <tr>
+                                    <td>@item.User.FirstName</td>
+                                    <td>@item.User.LastName</td>
+                                    <td>@item.User.PhoneNumber</td>
+                                    <td>@item.User.Email</td>
+                                    <td>@item.Registration_Number</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- /.table property-list-table -->
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="SURGEONS" role="tabpanel" aria-labelledby="SURGEONS-tab">
+            <div class="bg-white card-box p0 border-20 m-3">
+                <div class="table-responsive pt-25 pb-25 pe-4 ps-4">
+
+                    <table id="Table3" class="table property-list-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">NAME</th>
+
+                                <th scope="col">SURNAME</th>
+                                <th scope="col">CONTACT NUMBER</th>
+                                <th scope="col">E-MAIL ADDRESS</th>
+                                <th scope="col">HEALTH COUNCIL REGISTRATION NUMBER</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-0">
+                            @foreach (Surgeon item in Model.Surgeon)
+                            {
+                                <tr>
+                                    <td>@item.User.FirstName</td>
+                                    <td>@item.User.LastName</td>
+                                    <td>@item.User.PhoneNumber</td>
+                                    <td>@item.User.Email</td>
+                                    <td>@item.Registration_Number</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- /.table property-list-table -->
+                </div>
+            </div>
+        </div> 
+        <div class="tab-pane fade" id="PHARMACISTS" role="tabpanel" aria-labelledby="PHARMACISTS-tab">
+            <div class="bg-white card-box p0 border-20 m-3">
+                <div class="table-responsive pb-25 pe-4 ps-4">
+
+                    <table id="Table4" class="table property-list-table">
+                        <thead>
+                            <tr>
+                                <th scope="col">NAME</th>
+
+                                <th scope="col">SURNAME</th>
+                                <th scope="col">CONTACT NUMBER</th>
+                                <th scope="col">E-MAIL ADDRESS</th>
+                                <th scope="col">HEALTH COUNCIL REGISTRATION NUMBER</th>
+                            </tr>
+                        </thead>
+                        <tbody class="border-0">
+                            @foreach (Pharmacist item in Model.Pharmacist)
+                            {
+                                <tr>
+                                    <td>@item.User.FirstName</td>
+                                    <td>@item.User.LastName</td>
+                                    <td>@item.User.PhoneNumber</td>
+                                    <td>@item.User.Email</td>
+                                    <td>@item.Registration_Number</td>
+
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                    <!-- /.table property-list-table -->
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<link href="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.css" rel="stylesheet">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/pdfmake.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.2.7/vfs_fonts.js"></script>
+<script src="https://cdn.datatables.net/v/bs5/dt-1.13.6/b-2.4.2/b-colvis-2.4.2/b-html5-2.4.2/b-print-2.4.2/fh-3.4.0/kt-2.10.0/r-2.5.0/sc-2.2.0/sb-1.6.0/sp-2.2.0/sl-1.7.0/datatables.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#Table1').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+            order: [[1, 'desc']],
+            columnDefs: [
+                {
+                    targets: 1, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        }); 
+        $('#Table4').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+            order: [[1, 'desc']],
+            columnDefs: [
+                {
+                    targets: 1, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        }); 
+        $('#Table2').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+            order: [[1, 'desc']],
+            columnDefs: [
+                {
+                    targets: 1, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+        $('#Table3').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+                'copy', 'csv', 'excel', 'pdf'
+            ],
+            order: [[1, 'desc']],
+            columnDefs: [
+                {
+                    targets: 1, // Index of the "Start date" column
+                    render: function (data, type, row) {
+                        if (type === 'sort') {
+                            return new Date(data).getTime(); // Convert date to timestamp for sorting
+                        }
+                        return data;
+                    }
+                }
+            ]
+        });
+    });
+</script>

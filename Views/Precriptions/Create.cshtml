@@ -1,0 +1,280 @@
+﻿@model ChrisHaniHospital.Models.Precription
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<div class="m-2">
+    <h4>New Prescription</h4>
+</div>
+
+
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input hidden asp-for="Id" id="PrescriptionId" />
+            <input hidden asp-for="PatientId" id="PatientIdValue" />
+            <div class="form-group">
+                <label asp-for="PatientId" class="control-label">Select Patient</label>
+                <select  id="PatientId"class="form-control" asp-items="ViewBag.PatientId"></select>
+            </div>
+            <div class="row m-3">
+                <div class="form-group col-6">
+                    <label  class="control-label">Select Medication</label>
+                    <select id="Medication" class="form-control" asp-items="ViewBag.MedicationId"></select>
+                </div>
+                <div class="form-group col-6">
+                    <label  class="control-label">Quantity</label>
+                    <input id="Quantity" class="form-control" />
+                    <span  class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label  class="control-label">Instruction</label>
+                    <input id="MedicationNotes"  class="form-control"/>
+                    <span class="text-danger"></span>
+                </div>
+                <div class="d-flex mt-1 align-content-end justify-content-end">
+                    <button onclick="AddMedication()" style="--bs-btn-padding-y: .1rem; --bs-btn-padding-x: .3rem; --bs-btn-font-size: .5rem;"
+                            type="button" class="btn btn-primary btn-sm ms-auto">
+                        Add Selected Medication
+                    </button>
+                  
+                </div>
+                <div>
+                    <h6>Added Medications</h6>
+                    <ol id="AddedMedications">
+                    </ol>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save Prescription" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script>
+        function RemoveActive(PatientId, AllergyId, text) {
+            $.ajax({
+                url: `/api/Main/RemoveMedication/${PatientId}/${AllergyId}`,
+                type: 'DELETE',
+                success: function (data) {
+                    // Remove the list item from the DOM
+                    $(`#AddedMedications li:has(i[onclick="RemoveActive(${PatientId},${AllergyId},'${text}')"])`).remove();
+                    // Add the removed allergy back to the select element
+                    $('#Medication').append(new Option(text, AllergyId));
+                    toastr.success('Medication Removed');
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error:', error);
+                    toastr.error('Failed to remove Medication');
+                }
+            });
+        }
+        function AddMedication() {
+            var MedicationId = $('#Medication').val();
+            var MedicationText = $('#Medication option:selected').text(); // Get the selected text
+            var PrescriptionId = $('#PrescriptionId').val();
+            var PatientId = $('#PatientId').val();
+            var Quantity = $('#Quantity').val();
+            var Instructions = $('#MedicationNotes').val();
+            if (MedicationId && Quantity && PatientId) {
+
+                var PrescriptionMedicationAddVM = {
+                    MedicationId: MedicationId,
+                    Quantity: Quantity,
+                    Instructions: Instructions,
+                    PrescriptionId: PrescriptionId ? PrescriptionId : 0,
+                    PatientId: PatientId
+                };
+
+                $.ajax({
+                    url: '/api/Main/PrescriptionMedication',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PrescriptionMedicationAddVM),
+                    success: function (data) {
+                        var list = `<li>${MedicationText} (Notes: ${$('#MedicationNotes').val() ? $('#MedicationNotes').val() : 'None'})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveActive(${MedicationId},${data.id},'${MedicationText}')"></i></li>`;
+                        $("#AddedMedications").append(list);
+                        $('#Medication option:selected').remove();
+                        $('#PatientId').prop('disabled', true);
+                        document.getElementById('PrescriptionId').value = data.id;
+                        document.getElementById('PatientIdValue').value = PatientId;
+                        toastr.success('Medication Added to prescrition');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please enter all required fields');
+            }
+        }
+        function Save() {
+            var MedicationId = $('#Medication').val();
+            var MedicationText = $('#Medication option:selected').text(); // Get the selected text
+            var PrescriptionId = $('#PrescriptionId').val();
+            var PatientId = $('#PatientId').val();
+            var Quantity = $('#Quantity').val();
+            var Instructions = $('#MedicationNotes').val();
+            if (MedicationId && Quantity && PatientId) {
+
+                var PrescriptionMedicationAddVM = {
+                    MedicationId: MedicationId,
+                    Quantity: Quantity,
+                    Instructions: Instructions,
+                    PrescriptionId: PrescriptionId ? PrescriptionId : 0,
+                    PatientId: PatientId
+                };
+
+                $.ajax({
+                    url: '/api/Main/PrescriptionMedication',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(PrescriptionMedicationAddVM),
+                    success: function (data) {
+                        var list = `<li>${MedicationText} (Notes: ${$('#MedicationNotes').val() ? $('#MedicationNotes').val() : 'None'})<i style="cursor:pointer;margin-left: 5px;" class=" text-danger bi bi-trash3-fill" onclick="RemoveActive(${MedicationId},${data.id},'${MedicationText}')"></i></li>`;
+                        $("#AddedMedications").append(list);
+                        $('#Medication option:selected').remove();
+                        $('#PatientId').prop('disabled', true);
+                        document.getElementById('PrescriptionId').value = data.id;
+                        toastr.success('Medication Added to prescrition');
+                    },
+                    error: function (xhr, status, error) {
+                        console.error('Error:', error);
+                    }
+                });
+            }
+            else {
+                toastr.error('Please enter all required fields');
+            }
+        }
+        $(document).ready(function () {
+            toastr.options = {
+                "closeButton": true,
+                "newestOnTop": true,
+                "progressBar": false,
+                "positionClass": "toast-top-center",
+                "preventDuplicates": false,
+                "onclick": null,
+                "showDuration": "300",
+                "hideDuration": "1000",
+                "timeOut": "5000",
+                "extendedTimeOut": "1000",
+                "showEasing": "swing",
+                "hideEasing": "linear",
+                "showMethod": "fadeIn",
+                "hideMethod": "fadeOut"
+            }
+
+            $('#suburbSelect').change(function () {
+                var suburbId = $(this).val();
+                var formData = {
+                    suburbId: suburbId
+                };
+                if (suburbId) {
+                    $.ajax({
+                        url: '/api/Main/GetCityAndProvince',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                console.log(data);
+                                $('#cityInput').val(data.city);
+                                $('#provinceInput').val(data.province);
+                            } else {
+                                $('#cityInput').val('');
+                                $('#provinceInput').val('');
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            $('#WardSelect').change(function () {
+                var WardID = $(this).val();
+                var formData = {
+                    WardID: WardID
+                };
+                if (WardID) {
+                    $.ajax({
+                        url: '/api/Main/GetWardID',
+                        type: 'Post',
+                        data: formData,
+                        success: function (data) {
+                            if (data) {
+                                $('#BedSelect').empty();
+                                var i = 1;
+                                console.log(data.ward.numberOFBeds);
+                                while (i <= data.ward.numberOFBeds) {
+                                    $('#BedSelect').append($('<option>', {
+                                        value: i,
+                                        text: "Bed " + i
+                                    }));
+                                    i++;
+                                }
+                            }
+                            else {
+                                $('#BedSelect').empty();
+                            }
+                        },
+                        error: function (xhr, status, error) {
+                            console.error("Error: " + error);
+                        }
+                    });
+                } else {
+                    $('#cityInput').val('');
+                    $('#provinceInput').val('');
+                }
+            });
+            const nextButtons = document.querySelectorAll('#nextButton');
+            const backButtons = document.querySelectorAll('#backButton');
+            const tabs = document.querySelectorAll('.tab-pane');
+            const tabButtons = document.querySelectorAll('.tab-btn');
+            let currentIndex = 0;
+
+            function updateTabs(index) {
+                tabs.forEach((tab, i) => {
+                    tab.classList.toggle('show', i === index);
+                    tab.classList.toggle('active', i === index);
+                });
+                tabButtons.forEach((button, i) => {
+                    button.classList.toggle('active', i === index);
+                });
+            }
+
+            nextButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex < tabs.length - 1) {
+                        currentIndex++;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+
+            backButtons.forEach(button => {
+                button.addEventListener('click', function () {
+                    if (currentIndex > 0) {
+                        currentIndex--;
+                        updateTabs(currentIndex);
+                    }
+                });
+            });
+        });
+    </script>
+}

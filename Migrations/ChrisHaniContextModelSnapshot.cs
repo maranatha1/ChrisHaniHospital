@@ -45,6 +45,9 @@ namespace ChrisHaniHospital.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("IdentityNumber")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("LastName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -93,6 +96,572 @@ namespace ChrisHaniHospital.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.AdministeredMedication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime?>("AdministeredDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MedicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Notes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PrescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicationId");
+
+                    b.HasIndex("PrescriptionId");
+
+                    b.ToTable("administeredMedications");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.AdmittedPatient", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddressLine2")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Bed")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateAdmitted")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatinetId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SuburbId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("SurgeonID")
+                        .HasColumnType("int");
+
+                    b.Property<int>("WardId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatinetId");
+
+                    b.HasIndex("SuburbId");
+
+                    b.HasIndex("SurgeonID");
+
+                    b.HasIndex("WardId");
+
+                    b.ToTable("AdmittedPatients");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Allergies", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("AllergyName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Allergies");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Anaesthesiologist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Registration_Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Anaesthesiologists");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.City", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProvinceId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProvinceId");
+
+                    b.ToTable("City");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Conditions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("ConditionName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Conditions");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Country", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Abbreviation")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Country");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Medication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Dosage")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("MedicationName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("Schedule")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Medication");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Nurse", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Registration_Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Nurses");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Patient", b =>
+                {
+                    b.Property<int>("PatientId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PatientId"));
+
+                    b.Property<string>("AddressLine1")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("AddressLine2")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateOnly?>("DateOfBirth")
+                        .IsRequired()
+                        .HasColumnType("date");
+
+                    b.Property<string>("Gender")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int?>("SuburbId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
+                    b.Property<int?>("SurburbId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("PatientId");
+
+                    b.HasIndex("SurburbId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Patients");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientAllergies", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("AllergyId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("AllergyNotes")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AllergyId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientAllergies");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientConditions", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ConditionId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ConditionNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ConditionId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientConditions");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientMedication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DateAdded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("MedicationId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("MedicationNotes")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicationId");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientMedications");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientVitals", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("BloodPressure")
+                        .HasColumnType("int");
+
+                    b.Property<int>("BodyTemparature")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("DateRecorded")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("HeartRate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("OxygenSaturation")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PulseRate")
+                        .HasColumnType("int");
+
+                    b.Property<int>("RespiratoryRate")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("PatientVitals");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Pharmacist", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Registration_Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Pharmacists");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Precription", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("DatePrescribed")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("PatientId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Status")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PatientId");
+
+                    b.ToTable("Precription");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PrescriptionMedication", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Instructions")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("MedicationId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PrescriptionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MedicationId");
+
+                    b.HasIndex("PrescriptionId");
+
+                    b.ToTable("PrescriptionMedications");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Province", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CountryID")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CountryID");
+
+                    b.ToTable("Province");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Surbub", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("CityId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("CityId");
+
+                    b.ToTable("Surbub");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Surgeon", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Registration_Number")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserID")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserID");
+
+                    b.ToTable("Surgeons");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Ward", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("NumberOFBeds")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Ward");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -230,6 +799,250 @@ namespace ChrisHaniHospital.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.AdministeredMedication", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Medication", "Medication")
+                        .WithMany()
+                        .HasForeignKey("MedicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Precription", "Prescription")
+                        .WithMany()
+                        .HasForeignKey("PrescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medication");
+
+                    b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.AdmittedPatient", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatinetId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Surbub", "Suburb")
+                        .WithMany()
+                        .HasForeignKey("SuburbId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Surgeon", "Surgeon")
+                        .WithMany()
+                        .HasForeignKey("SurgeonID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Ward", "Ward")
+                        .WithMany()
+                        .HasForeignKey("WardId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+
+                    b.Navigation("Suburb");
+
+                    b.Navigation("Surgeon");
+
+                    b.Navigation("Ward");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Anaesthesiologist", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Areas.Identity.Data.ChrisHaniUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.City", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Province", "Province")
+                        .WithMany()
+                        .HasForeignKey("ProvinceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Province");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Nurse", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Areas.Identity.Data.ChrisHaniUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Patient", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Surbub", "Suburb")
+                        .WithMany()
+                        .HasForeignKey("SurburbId");
+
+                    b.HasOne("ChrisHaniHospital.Areas.Identity.Data.ChrisHaniUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Suburb");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientAllergies", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Allergies", "Allergies")
+                        .WithMany()
+                        .HasForeignKey("AllergyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Allergies");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientConditions", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Conditions", "Condition")
+                        .WithMany()
+                        .HasForeignKey("ConditionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Condition");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientMedication", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Medication", "Medication")
+                        .WithMany()
+                        .HasForeignKey("MedicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medication");
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PatientVitals", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Pharmacist", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Areas.Identity.Data.ChrisHaniUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Precription", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Patient", "Patient")
+                        .WithMany()
+                        .HasForeignKey("PatientId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Patient");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.PrescriptionMedication", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Medication", "Medication")
+                        .WithMany()
+                        .HasForeignKey("MedicationId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ChrisHaniHospital.Models.Precription", "Prescription")
+                        .WithMany()
+                        .HasForeignKey("PrescriptionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Medication");
+
+                    b.Navigation("Prescription");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Province", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.Country", "Country")
+                        .WithMany()
+                        .HasForeignKey("CountryID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Country");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Surbub", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Models.City", "City")
+                        .WithMany()
+                        .HasForeignKey("CityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("City");
+                });
+
+            modelBuilder.Entity("ChrisHaniHospital.Models.Surgeon", b =>
+                {
+                    b.HasOne("ChrisHaniHospital.Areas.Identity.Data.ChrisHaniUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
