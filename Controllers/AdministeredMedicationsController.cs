@@ -51,6 +51,21 @@ namespace ChrisHaniHospital.Controllers
             return View(viewModel);
         }
 
+        public async Task<IActionResult> Report()
+        {
+            var chrisHaniContext = await _context
+                .administeredMedications.Include(a => a.Medication)
+                .Include(a => a.Medication)
+                .Include(a => a.Prescription)
+                .ThenInclude(a => a.Patient)
+                .ThenInclude(a => a.User)
+                .ToListAsync();
+
+            var viewModel = new AdministeredVM();
+            viewModel.AdministeredMedications = chrisHaniContext;
+            return View(viewModel);
+        }
+
         // GET: AdministeredMedications/Details/5
         public async Task<IActionResult> Details(int? id)
         {

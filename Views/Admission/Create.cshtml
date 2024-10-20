@@ -127,6 +127,12 @@
                     <div class="bg-white p-2 mb-3">
                         <h5>Medical conditions and Allergies Details</h5>
                         <div class="row border border-1 rounded m-1">
+                            <div class="m-1">
+                                <div class="col-12 bg-secondary p-1 m-1 position-relative">
+                                    <h5 class="text-white mt-2">Allergies</h5>
+                                </div>
+                            </div>
+                           
                             <div class="form-group col-md-6">
                                 <label asp-for="AlergyID" class="control-label"></label>
                                 <select id="Allergy" class="form-control">
@@ -162,6 +168,11 @@
                         </div>
 
                         <div class="row border border-1 rounded  m-1">
+                            <div class="m-1">
+                                <div class="col-12 bg-secondary p-1 m-1 position-relative">
+                                    <h5 class="text-white mt-2">Medical Conditions</h5>
+                                </div>
+                            </div>
                             <div class="form-group col-md-6">
                                 <label asp-for="ConditionID" class="control-label">Condition</label>
                                 <select id="Condition" asp-for="ConditionID" class="form-control" asp-items="ViewBag.ConditionID"></select>
@@ -185,6 +196,11 @@
                             </div>
                         </div>
                         <div class="row border border-1 rounded m-1">
+                            <div class="m-1">
+                                <div class="col-12 bg-secondary p-1 m-1 position-relative">
+                                    <h5 class="text-white mt-2">Current Medication</h5>
+                                </div>
+                            </div>
                             <div class="form-group col-md-4">
                                 <label asp-for="MedicationID" class="control-label"> Current Medication</label>
                                 <select id="Medication" asp-for="MedicationID" class="form-control" asp-items="ViewBag.MedicationID"></select>
@@ -218,21 +234,27 @@
                 </div>
                 <div class="tab-pane fade  m-0 col-12" id="pills-Vitals" role="tabpanel" aria-labelledby="pills-Vitals-tab" tabindex="0">
                     <div class="bg-white p-2 mb-3">
+                        <div id="liveAlertPlaceholder"></div>
                         <h5>Vital Details</h5>
                         <div class="row">
+                            <div class="m-1">
+                                <div class="col-12 bg-secondary p-1 m-1 position-relative">
+                                    <h5 class="text-white mt-2">Vitals</h5>
+                                </div>
+                            </div>
                             <div class="form-group col-md-4">
-                                <label asp-for="BodyTemparature" class="control-label"></label>
-                                <input type="number" max=37 min=34 asp-for="BodyTemparature" class="form-control" />
+                                <label asp-for="BodyTemparature" class="control-label">Body Temperature (C)</label>
+                                <input type="number" id="BodyTemparature" onblur="validateTemperature()" asp-for="BodyTemparature" class="form-control" />
                                 <span asp-validation-for="BodyTemparature" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-4">
-                                <label asp-for="BloodPressure" class="control-label"></label>
+                                <label asp-for="BloodPressure" class="control-label">Blood Pressure</label>
                                 <input asp-for="BloodPressure" class="form-control" />
                                 <span asp-validation-for="BloodPressure" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-4">
                                 <label asp-for="HeartRate" class="control-label"></label>
-                                <input type="number" max=100 min=60 asp-for="HeartRate" class="form-control" />
+                                <input type="number" id="HeartRate" asp-for="HeartRate" onblur="validateHeart()" class="form-control" />
                                 <span asp-validation-for="HeartRate" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-4">
@@ -242,7 +264,7 @@
                             </div>
                             <div class="form-group col-md-4">
                                 <label asp-for="OxygenSaturation" class="control-label"></label>
-                                <input type="number" max=100 min=95 asp-for="OxygenSaturation" class="form-control" />
+                                <input type="number" id="Oxygen" onblur="validateOxygen()" asp-for="OxygenSaturation" class="form-control" />
                                 <span asp-validation-for="OxygenSaturation" class="text-danger"></span>
                             </div>
                             <div class="form-group col-md-4">
@@ -269,6 +291,30 @@
     <partial name="_ValidationScriptsPartial" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script>
+        const appendAlert = (message, type) => {
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+            const existingAlerts = alertPlaceholder.getElementsByClassName(`alert-${type}`);
+
+            for (let alert of existingAlerts) {
+                if (alert.innerText.includes(message)) {
+                    return; // Alert already exists, do not add a duplicate
+                }
+            }
+
+            const wrapper = document.createElement('div');
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('');
+
+            alertPlaceholder.append(wrapper);
+        };
+        const clearAlerts = () => {
+            const alertPlaceholder = document.getElementById('liveAlertPlaceholder');
+            alertPlaceholder.innerHTML = ''; // Clear all existing alerts
+        };
         function RemoveActive(PatientId, AllergyId, text) {
             $.ajax({
                 url: `/api/Main/RemovePatientAllergy/${PatientId}/${AllergyId}`,
@@ -303,7 +349,51 @@
                 }
             });
         }
-
+        function validateTemperature() {
+            var tempInput = document.getElementById('BodyTemparature');
+            var tempValue = parseFloat(tempInput.value);
+            if (tempValue < 34) {
+                appendAlert("Patient's body temperature is too low", 'danger')
+               
+            }
+            else if (tempValue > 37) {
+                appendAlert("Patient's body temperature is too high", 'danger')
+                
+            }
+            else {
+                clearAlerts(); // Remove any existing alerts
+            }
+        }  
+        function validateHeart() {
+            var tempInput = document.getElementById('HeartRate');
+            var tempValue = parseFloat(tempInput.value);
+            if (tempValue < 60) {
+                appendAlert("Patient's heart rate is too low", 'danger')
+               
+            }
+            else if (tempValue > 100) {
+                appendAlert("Patient's heart rate is too high", 'danger')
+                
+            }
+            else {
+                clearAlerts(); // Remove any existing alerts
+            }
+        }
+        function validateOxygen() {
+            var tempInput = document.getElementById('Oxygen');
+            var tempValue = parseFloat(tempInput.value);
+            if (tempValue < 95) {
+                appendAlert("Patient's Oxygen  rate is too low", 'danger')
+               
+            }
+            else if (tempValue > 100) {
+                appendAlert("Patient's Oxygen  rate is too high", 'danger')
+                
+            }
+            else {
+                clearAlerts(); // Remove any existing alerts
+            }
+        }
         function RemoveCondition(ConditionId, PatientId, ConditionText) {
             $.ajax({
                 url: `/api/Main/RemovePatientCondition/${PatientId}/${ConditionId}`,
@@ -549,6 +639,9 @@
                     }
                 });
             });
+          
+           
+           
         });
     </script>
 }

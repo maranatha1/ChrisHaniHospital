@@ -1,0 +1,192 @@
+﻿@model ChrisHaniHospital.Models.AdministeredVM
+@using ChrisHaniHospital.Areas.Identity.Data
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<ChrisHaniUser> SignInManager
+@inject UserManager<ChrisHaniUser> UserManager
+@{
+    ViewData["Title"] = "Administer Medications";
+    Layout = "~/Views/Shared/_UserLayout.cshtml";
+}
+
+<section class="section m-2">
+    <div class="d-flex justify-content-end  m-2">
+        <button id="Printbtn" onclick="PrintFile()" class="btn btn-primary">Generate report</button>
+    </div>
+    <div class="card">
+        <div class="card-header">
+            <div id="LogoDetails" hidden class="row mb-4 p-2">
+                <div>
+                    <img src="~/images/Logos/logo.png" width="200" alt="Health Sync Logo" />
+                </div>
+            </div>
+            <div class="text-center">
+                <h3>Medication Report</h3>
+                <h5>@UserManager.GetUserAsync(User).Result.FirstName @UserManager.GetUserAsync(User).Result.LastName</h5>
+            </div>
+        </div>
+        <div class="card-body">
+            <form id="filterForm">
+                <div class="row mb-3">
+                    <div class="col-md-3">
+                        <label for="startDate" class="form-label">From</label>
+                        <input type="date" id="startDate" class="form-control" />
+                    </div>
+                    <div class="col-md-3">
+                        <label for="endDate" class="form-label">To</label>
+                        <input type="date" id="endDate" class="form-control" />
+                    </div>
+                    <div class="col-md-3 align-self-end">
+                        <button type="button" class="btn btn-primary" onclick="filterByDate()">Filter</button>
+                    </div>
+                </div>
+            </form>
+            <div class="row">
+                <div id="dateRangeText" class="mb-3 col-6"></div>
+                <div class="col-6 mb-3 ">
+                    Report generated on: @DateTime.Now.ToString("dd/MMMM/yyyy")
+                </div>
+            </div>
+
+            <table class="table table-striped" id="medicationTable">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>Patient details</th>
+                        <th>Medication</th>
+                        <th>Quantity</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.AdministeredMedications)
+                    {
+                        <tr>
+                            <td>@item.AdministeredDate?.ToString("dd/MM/yyyy")</td>
+                            <td>@item.Prescription.Patient.User.FirstName @item.Prescription.Patient.User.LastName</td>
+                            <td>@item.Medication?.MedicationName</td>
+                            <td>@item?.Quantity</td>
+                            <td>@item.AdministeredDate?.ToString("HH:mm")</td>
+                        </tr>
+                    }
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="5" id="totalPatients"></td>
+                    </tr>
+                    <tr>
+                        <td colspan="2" id="medicationSummary"></td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </div>
+</section>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        function PrintFile() {
+            var table7 = $('#Table7').DataTable();
+            $('#LogoDetails').removeAttr('hidden');
+            $('#Printbtn').attr('hidden', true);
+            $('#Retake').attr('hidden', true);
+            $('#ReadminBtn').attr('hidden', true);
+            $('#Navbar').attr('hidden', true);
+            $('#sidebar').attr('hidden', true);
+            $('#filterForm').attr('hidden', true);
+            table7.column(3).visible(false);
+            // $('#filterDiv').attr('hidden', true);
+            window.print();
+            table7.column(3).visible(true);
+            $('#LogoDetails').attr('hidden', true);
+            $('#Printbtn').removeAttr('hidden');
+            $('#Navbar').removeAttr('hidden');
+            $('#filterForm').removeAttr('hidden');
+            $('#ReadminBtn').removeAttr('hidden');
+            $('#Retake').removeAttr('hidden');
+            $('#sidebar').removeAttr('hidden');
+            $('#filterDiv').removeAttr('hidden');
+        }
+
+        function filterByDate() {
+            var startDate = new Date(document.getElementById('startDate').value);
+            var endDate = new Date(document.getElementById('endDate').value);
+            var tableBody = document.getElementById('medicationTable').getElementsByTagName('tbody')[0];
+            var rows = tableBody.getElementsByTagName('tr');
+            var dateRangeText = document.getElementById('dateRangeText');
+            var uniquePatients = new Set();
+            var medicationSummary = {};
+
+            for (var i = 0; i < rows.length; i++) {
+                var dateCell = rows[i].getElementsByTagName('td')[0];
+                var patientCell = rows[i].getElementsByTagName('td')[1];
+                var medicationCell = rows[i].getElementsByTagName('td')[2];
+                var quantityCell = rows[i].getElementsByTagName('td')[3];
+                if (dateCell && patientCell && medicationCell && quantityCell) {
+                    var dateValue = new Date(dateCell.innerText.split('/').reverse().join('-'));
+
+                    if (dateValue >= startDate && dateValue <= endDate) {
+                        rows[i].style.display = '';
+                        uniquePatients.add(patientCell.innerText);
+
+                        var medicationName = medicationCell.innerText;
+                        var quantity = parseInt(quantityCell.innerText);
+                        if (medicationSummary[medicationName]) {
+                            medicationSummary[medicationName] += quantity;
+                        } else {
+                            medicationSummary[medicationName] = quantity;
+                        }
+                    } else {
+                        rows[i].style.display = 'none';
+                    }
+                }
+            }
+
+            dateRangeText.innerHTML = `<strong>Date range from ${startDate.toLocaleDateString()} to ${endDate.toLocaleDateString()}</strong>`;
+            document.getElementById('totalPatients').innerText = `Total unique patients: ${uniquePatients.size}`;
+
+            var summaryText = 'Medication Summary:<br>';
+            for (var medication in medicationSummary) {
+                summaryText += `${medication}: ${medicationSummary[medication]}<br>`;
+            }
+            document.getElementById('medicationSummary').innerHTML = summaryText;
+        }
+
+        function countUniquePatients() {
+            var tableBody = document.getElementById('medicationTable').getElementsByTagName('tbody')[0];
+            var rows = tableBody.getElementsByTagName('tr');
+            var uniquePatients = new Set();
+            var medicationSummary = {};
+
+            for (var i = 0; i < rows.length; i++) {
+                var patientCell = rows[i].getElementsByTagName('td')[1];
+                var medicationCell = rows[i].getElementsByTagName('td')[2];
+                var quantityCell = rows[i].getElementsByTagName('td')[3];
+                if (patientCell && medicationCell && quantityCell) {
+                    uniquePatients.add(patientCell.innerText);
+
+                    var medicationName = medicationCell.innerText;
+                    var quantity = parseInt(quantityCell.innerText);
+                    if (medicationSummary[medicationName]) {
+                        medicationSummary[medicationName] += quantity;
+                    } else {
+                        medicationSummary[medicationName] = quantity;
+                    }
+                }
+            }
+
+            document.getElementById('totalPatients').innerHTML = `<strong>Total unique patients: ${uniquePatients.size}</strong>`;
+
+            var summaryText = '<strong>Medication Summary:</strong><br>';
+            summaryText += '<table class="table table-bordered"><thead><tr><th>Medication Name</th><th>Quantity</th></tr></thead><tbody>';
+            for (var medication in medicationSummary) {
+                summaryText += `<tr><td><strong>${medication}</strong></td><td>${medicationSummary[medication]}</td></tr>`;
+            }
+            summaryText += '</tbody></table>';
+            document.getElementById('medicationSummary').innerHTML = summaryText;
+
+
+        }
+
+        window.onload = countUniquePatients;
+    </script>
+}

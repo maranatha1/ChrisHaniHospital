@@ -124,25 +124,26 @@
                             <a class="sidebar-link" asp-action="Index" asp-controller="HospitalDetails">
                                 <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Hospital details</span>
                             </a>
+                        </li>                  
+                        <li class="sidebar-item">
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Allergies">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Allergies</span>
+                            </a>
                         </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-sign-in.html">
-                                <i class="align-middle" data-feather="log-in"></i> <span class="align-middle">Sign In</span>
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Medications">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Medications</span>
                             </a>
                         </li>
 
+                        <li class="sidebar-header">
+                            Ward Management
+                        </li>
                         <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-sign-up.html">
-                                <i class="align-middle" data-feather="user-plus"></i> <span class="align-middle">Sign Up</span>
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Wards">
+                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Wards</span>
                             </a>
                         </li>
-
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" href="pages-blank.html">
-                                <i class="align-middle" data-feather="book"></i> <span class="align-middle">Blank</span>
-                            </a>
-                        </li>
-
                         <li class="sidebar-header">
                             Address Management
                         </li>
@@ -176,8 +177,8 @@
                         </li>
 
                         <li class="sidebar-item @("Dashboard".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Nurse".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
-                            <a class="sidebar-link" asp-action="Nurse" asp-controller="Dashboard">
-                                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Dashboard</span>
+                            <a class="sidebar-link" asp-action="Index" asp-controller="Home">
+                                <i class="align-middle" data-feather="sliders"></i> <span class="align-middle">Home</span>
                             </a>
                         </li>
                         <li class="sidebar-item @("Patients".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Booked".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
@@ -189,53 +190,12 @@
                             <a class="sidebar-link" asp-action="Index" asp-controller="Admission">
                                 <i class="align-middle" data-feather="book"></i> <span class="align-middle">Admitted Patients</span>
                             </a>
-                        </li>       <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Conditions">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Conditions</span>
-                            </a>
-                        </li>    
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Allergies">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Allergies</span>
-                            </a>
-                        </li> 
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Medications">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Medications</span>
-                            </a>
                         </li>
-                     
-                        <li class="sidebar-header">
-                            Ward Management
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Wards">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Wards</span>
+                        <li class="sidebar-item @("AdministeredMedications".Equals(currentController, StringComparison.OrdinalIgnoreCase) && "Report".Equals(currentAction, StringComparison.OrdinalIgnoreCase) ? "active" : "")">
+                            <a class="sidebar-link" asp-action="Report" asp-controller="AdministeredMedications">
+                                <i class="align-middle" data-feather="file-text"></i> <span class="align-middle">Medication Report</span>
                             </a>
-                        </li>
-                        <li class="sidebar-header">
-                            Address Management
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Surbubs">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Suburbs</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Cities">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">City</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Provinces">
-                                <i class="align-middle" data-feather="align-left"></i> <span class="align-middle">Provices</span>
-                            </a>
-                        </li>
-                        <li class="sidebar-item">
-                            <a class="sidebar-link" asp-action="Index" asp-controller="Countries">
-                                <i class="align-middle" data-feather="coffee"></i> <span class="align-middle">Countries</span>
-                            </a>
-                        </li>
+                        </li>   
                     </ul>
                 }
             </div>

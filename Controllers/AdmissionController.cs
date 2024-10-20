@@ -30,6 +30,7 @@ namespace ChrisHaniHospital.Controllers
                 .Include(a => a.Surgeon)
                 .ThenInclude(a => a.User)
                 .Include(a => a.Ward)
+                .OrderBy(a => a.DateAdmitted)
                 .ToList();
             return View(AdmmitedList);
         }

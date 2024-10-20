@@ -15,11 +15,11 @@ namespace ChrisHaniHospital.Models
         public virtual Patient? Patient { get; set; }
 
         [Required]
-        [Display(Name = "Blood Pressure")]
+        [Display(Name = "Body Temperature (C)")]
         public int BodyTemparature { get; set; }
 
         [Required]
-        [Display(Name = "Body Temperature (C)")]
+        [Display(Name = "Blood Pressure")]
         public int BloodPressure { get; set; }
 
         [Required]

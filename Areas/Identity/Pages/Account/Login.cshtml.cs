@@ -153,7 +153,7 @@ namespace ChrisHaniHospital.Areas.Identity.Pages.Account
                     }
                     else if (UserRoles.Contains(Roles.Nurse))
                     {
-                        return RedirectToAction("Nurse", "Dashboard");
+                        return RedirectToAction("Booked", "Patients");
                     }
                     else if (UserRoles.Contains(Roles.Pharmacist))
                     {
